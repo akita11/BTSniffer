@@ -9,12 +9,10 @@
 #include <SPI.h>
 #include "esp_efuse.h"
 
-// M5Capsule SD card SPI pins
-#define SD_CS_PIN 11
-// SCK=14, MISO=39, MOSI=12, CS=11
+// ピン番号は platformio.ini の build_flags で環境ごとに定義
+// M5Capsule:   PIN_LED=21, SD_SCK=14, SD_MISO=39, SD_MOSI=12, SD_CS_PIN=11
+// ATOM Lite:   PIN_LED=27, SD_SCK=23, SD_MISO=33, SD_MOSI=19, SD_CS_PIN=4
 
-// M5Capsule onboard WS2812B LED
-#define PIN_LED  21
 #define NUM_LEDS 1
 CRGB leds[NUM_LEDS];
 
@@ -129,7 +127,7 @@ void setup() {
   delay(500);
 
   // SD初期化（wifi.txt / mac.txt の読み書きに必要なため先に行う）
-  SPI.begin(14, 39, 12, SD_CS_PIN);  // SCK, MISO, MOSI, CS
+  SPI.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS_PIN);  // ピンは platformio.ini の build_flags で定義
   if (!SD.begin(SD_CS_PIN)) {
     printf("SD card init failed!\n");
     setLED(0xFF0000, 16, 2000);
